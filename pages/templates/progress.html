@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+	{% for key, value in participants.items %}
+		<li><h3>{{ value.ParticipantDetails.first_name}}</h3>
+			<style>
+				table, th, td {
+			  		border: 1px solid black;
+				}
+			</style>
+			<table style="width: 50%">
+				<tr>
+				    <th>Date</th>
+				    <th>Activity_Type</th>
+				    <th>Miles</th>
+				</tr>
+				{% for item in value.ParticipantActivities %}
+					{% for activity in item %}
+						<tr>
+							<td>{{ activity.date }}</td>
+							<td>{{ activity.activity_type }}</td>
+							<td>{{ activity.miles }}</td>
+						</tr>
+				{% endfor %}{% endfor %}
+			</table>
+		</li>
+	{% endfor %}
+</ul>
+{% endblock %}

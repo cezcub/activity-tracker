@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+	{% for key, value in participants.items %}
+		<li><h3>{{ value.ParticipantDetails.first_name }}</h3><p>Click <a href = '/create_activity/{{ value.ParticipantDetails.first_name }}'>here</a> to create a new activity for {{ value.ParticipantDetails.first_name }}, or <a href = /delete/>here</a> to delete an activity or participant.</p>
+			<style>
+				table, th, td {
+			  		border: 1px solid black;
+				}
+			</style>
+			<table style="width: 50%">
+				<tr>
+				    <th>Date</th>
+				    <th>Activity_Type</th>
+				    <th>Miles</th>
+				</tr>
+				{% for item in value.ParticipantActivities %}
+					{% for activity in item %}
+						<tr>
+							<td>{{ activity.date }}</td>
+							<td>{{ activity.activity_type }}</td>
+							<td>{{ activity.miles }}</td>
+						</tr>
+				{% endfor %}{% endfor %}
+			</table>
+		</li>
+	{% endfor %}
+</ul>
+
+<p>Click <a href = '/create_participant/'>here</a> to create a new participant.
+{% endblock %}
+
