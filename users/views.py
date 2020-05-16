@@ -48,7 +48,8 @@ def create_activity(request, str):
 
 @login_required
 def delete_participant(request, str):
-	participant = get_object_or_404(user=request.user, first_name=str)
+	participant = get_object_or_404(Participant, first_name=str, admin=request.user )
 	if request.method == 'POST':
-		obj.delete()
-	return render(request, 'delete.html', {})
+		participant.delete()
+		return redirect('/home/')
+	return render(request, 'delete_participant.html', {})

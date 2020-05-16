@@ -1,8 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class = 'centered-and-boxed'>
-<h1>Let's be strong! Let's work hard!</h1>
+<h1 class = 'center'>Let's be strong! Let's work hard!</h1>
 <p>Click <a href = '/home/'>here</a> to login to an account, or <a href = '/create_user/'>here</a> to create a new one.</p>
-</div>
+<h2>Challenge rules:</h2>
+<ul>
+	<li>Start date: May 16</li>
+	<li>End date: June 30</li>
+	<li><table>
+		<tr>
+			<th>Age</th>
+			<th>Miles to finish</th>
+			<th>Daily tasks</th>
+		</tr>
+		<tr>
+			<td>5 and below</td>
+			<td>30</td>
+			<td>None</td>
+		</tr>
+		<tr>
+			<td>6-8</td>
+			<td>50</td>
+			<td>Pushups, Sit-ups and Wall-sits for 20 seconds each</td>
+		</tr>
+		<tr>
+			<td>9-11</td>
+			<td>70</td>
+			<td>Pushups, Sit-ups and Wall-sits for 20 seconds each</td>
+		</tr>
+		<tr>
+			<td>18+</td>
+			<td>100</td>
+			<td>Pushups, Sit-ups and Wall-sits for 20 seconds each</td>
+		</tr>
+	</table>
+	</li>
+	<li>One bike mile is equal to 1/2 miles</li>
+<ul>
 {% endblock %}

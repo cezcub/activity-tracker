@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from pages.views import home_view, index_view, progress_view
-from users.views import create_user, create_participant, create_activity
+from users.views import create_user, create_participant, create_activity, delete_participant
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +28,5 @@ urlpatterns = [
     path('create_user/', create_user, name='sign-up'),
     path('create_participant/', create_participant, name='create-person'),
     path('create_activity/<str:str>', create_activity, name='new-activity'),
-    path('delete_participant/<str:str>')
+    path('delete_participant/<str:str>', delete_participant, name='delete-participant')
 ]
