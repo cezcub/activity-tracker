@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from .forms import CreateParticipant, CreateActivity, SignUpForm
 from django.contrib.auth.decorators import login_required
@@ -45,3 +45,10 @@ def create_activity(request, str):
 			Activity.objects.create(**my_dict)
 			return redirect('/home/')
 	return render(request, 'activity.html', {'form': my_form})
+
+@login_required
+def delete_participant(request, str):
+	participant = get_object_or_404(user=request.user, first_name=str)
+	if request.method == 'POST':
+		obj.delete()
+	return render(request, 'delete.html', {})

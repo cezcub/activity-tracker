@@ -28,4 +28,5 @@ urlpatterns = [
     path('create_user/', create_user, name='sign-up'),
     path('create_participant/', create_participant, name='create-person'),
     path('create_activity/<str:str>', create_activity, name='new-activity'),
+    path('delete_participant/<str:str>')
 ]
