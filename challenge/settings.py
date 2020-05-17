@@ -25,7 +25,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['letsrun.prep4cloud', '127.0.0.1']
+ALLOWED_HOSTS = ['letsrun.prep4cloud.com', '127.0.0.1']
 ADMINS = ['Aarush', 'aarush.tiyyagura@gmail.com']
 
 # Application definition

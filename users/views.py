@@ -42,6 +42,8 @@ def create_activity(request, str):
 			my_dict = my_form.cleaned_data
 			participants = Participant.objects.filter(first_name=str, admin=request.user)
 			my_dict.update({'user': participants[0]})
+			if my_dict['activity_type'] == "Biking":
+				my_dict['miles'] = my_dict['miles']/2
 			Activity.objects.create(**my_dict)
 			return redirect('/home/')
 	return render(request, 'activity.html', {'form': my_form})

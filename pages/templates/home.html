@@ -4,7 +4,9 @@
 <!---<h5>Click on an activity to delete it.</h5>-->
 <ul>
 	{% for key, value in participants.items %}
-		<li><h3>{{ value.ParticipantDetails.first_name }}</h3><p>Click <a href = '/create_activity/{{ value.ParticipantDetails.first_name }}'>here</a> to create a new activity for {{ value.ParticipantDetails.first_name }}, or <a href = '/delete_participant/{{ value.ParticipantDetails.first_name }} '>here</a> to delete this participant.</p>
+		<li><h3>{{ value.ParticipantDetails.first_name }}</h3><a href = '/create_activity/{{ value.ParticipantDetails.first_name }}'><button type="button">Create a new activity for {{ value.ParticipantDetails.first_name }}</button></a><a href = '/delete_participant/{{ value.ParticipantDetails.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
+		<br>
+		<br>
 			<style>
 				table, th, td {
 			  		border: 1px solid black;
@@ -29,6 +31,6 @@
 	{% endfor %}
 </ul>
 
-<p>Click <a href = '/create_participant/'>here</a> to create a new participant.</p>
+<a href = '/create_participant/'><button type="button">Create a new participant</button></a>
 {% endblock %}
 
