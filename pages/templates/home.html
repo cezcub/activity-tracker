@@ -23,7 +23,7 @@
 						<tr>
 							<td>{{ activity.date }}</td>
 							<td>{{ activity.activity_type }}</td>
-							<td>{{ activity.miles }}</td>
+							<td>{{ activity.miles|floatformat }}</td>
 						</tr>
 				{% endfor %}{% endfor %}
 			</table>

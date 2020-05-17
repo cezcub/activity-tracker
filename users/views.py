@@ -33,6 +33,20 @@ def create_participant(request):
 			return my_form.errors
 	return render(request, 'participant.html', {'form': my_form})
 
+
+# @login_required
+# def create_activity(request, str):
+# 	my_form = CreateActivity(request.POST or None)
+# 	if my_form.is_valid():
+# 		print(my_form.cleaned_data)
+# 		activity = Participant.objects.filter(first_name=str, admin=request.user)
+# 		for i in activity:
+# 			my_form.cleaned_data.update({'user': i})
+# 		print(my_form.cleaned_data)
+# 		my_form.save()
+# 		return redirect('/home/')
+# 	return render(request, 'activity.html', {'form': my_form})
+
 @login_required
 def create_activity(request, str):
 	my_form = CreateActivity()
@@ -44,6 +58,7 @@ def create_activity(request, str):
 			my_dict.update({'user': participants[0]})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
+			print(my_dict)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/')
 	return render(request, 'activity.html', {'form': my_form})

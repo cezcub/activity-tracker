@@ -18,7 +18,6 @@ def home_view(request):
 		activities = []
 		activity = Activity.objects.filter(user=participants[i])
 		activities.append(Activity.objects.filter(user=participants[i]))
-		print(activities)
 		participants2.update({i: {"ParticipantDetails": participants[i], "ParticipantActivities": activities}})
 	context={
 		'participants': participants2,
@@ -28,7 +27,7 @@ def home_view(request):
 @login_required
 def progress_view(request):
 	d = {}
-	participants = Participant.objects.order_by('-age_group', 'first_name')
+	participants = Participant.objects.order_by('age_group', 'first_name')
 	for i in participants:
 		activities = []
 		activities.append(Activity.objects.filter(user=i, activity_type='Push-ups').aggregate(push_average=Cast(Avg('miles'), IntegerField())))

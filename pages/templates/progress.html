@@ -15,7 +15,11 @@
 		<td>{{ key.age_group }}</td>
 		{% for v in value %}
 		{% for v2 in v.values %}
-		<td>{{ v2 }}</td>
+		{% if v2 is not None %}
+		<td>{{ v2|floatformat }}</td>
+		{% else %}
+		<td>0</td>
+		{% endif %}
 		{% endfor %}
 		{% endfor %}
 	</tr>

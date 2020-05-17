@@ -1,6 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Activity
+
+class DateInput(forms.DateInput):
+	input_type = 'date'
 
 class CreateParticipant(forms.Form):
 	age_groups = [('5 and below', '5 and below'), ('6-8','6-8'), ('9-11','9-11'), ('18+','18+')]
@@ -10,7 +14,7 @@ class CreateParticipant(forms.Form):
 class CreateActivity(forms.Form):
 	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Push-ups','Push-ups'), ('Sit-ups','Sit-ups')]
 	activity_type = forms.ChoiceField(choices=activity_choices)
-	date = forms.DateField(widget=forms.DateInput(attrs={'placeholder':'Enter as month/day/year - 01/01/20', 'size': 33}))
+	date = forms.DateField(widget=DateInput(attrs={'placeholder':'Enter as month/day/year - 01/01/20', 'size': 33, 'type': 'date'}))
 	miles = forms.DecimalField(max_digits=3, decimal_places=1, label='Miles/Number', help_text='Enter miles for Biking/Walking/Running, or number for Sit-ups/Push-ups')
 
 class SignUpForm(UserCreationForm):
