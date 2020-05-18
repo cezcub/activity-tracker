@@ -37,9 +37,9 @@ def create_participant(request):
 def edit_activity(request, pk):
 	activity = Activity.objects.get(id=pk)
 	if activity.activity_type == 'Biking':
-		my_form = EditActivity(request.POST or None, initial={'activity_type': activity.activity_type, 'date': activity.date, 'miles': activity.miles*2})
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles*2})
 	else:
-		my_form = EditActivity(request.POST or None, initial={'activity_type': activity.activity_type, 'date': activity.date, 'miles': activity.miles})
+		my_form = EditActivity(request.POST or None, instance=activity)
 	if my_form.is_valid():
 		my_form.save(activity.user)
 		return redirect('/home/')
