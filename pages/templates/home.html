@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!---<h5>Click on an activity to delete it.</h5>-->
 <ul>
 	{% for key, value in participants.items %}
 		<li><h3>{{ value.ParticipantDetails.first_name }}</h3><a href = '/create_activity/{{ value.ParticipantDetails.first_name }}'><button type="button">Create a new activity for {{ value.ParticipantDetails.first_name }}</button></a><a href = '/delete_participant/{{ value.ParticipantDetails.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
@@ -17,6 +16,7 @@
 				    <th>Date</th>
 				    <th>Activity_Type</th>
 				    <th>Miles</th>
+				    <th>Edit</th>
 				</tr>
 				{% for item in value.ParticipantActivities %}
 					{% for activity in item %}
@@ -24,6 +24,7 @@
 							<td>{{ activity.date }}</td>
 							<td>{{ activity.activity_type }}</td>
 							<td>{{ activity.miles|floatformat }}</td>
+							<td><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit activity</button></a></td>
 						</tr>
 				{% endfor %}{% endfor %}
 			</table>

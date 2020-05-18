@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
-from .forms import CreateParticipant, CreateActivity, SignUpForm
+from .forms import CreateParticipant, CreateActivity, SignUpForm, EditActivity
 from django.contrib.auth.decorators import login_required
 from .models import Participant, Activity
 
@@ -33,19 +33,17 @@ def create_participant(request):
 			return my_form.errors
 	return render(request, 'participant.html', {'form': my_form})
 
-
-# @login_required
-# def create_activity(request, str):
-# 	my_form = CreateActivity(request.POST or None)
-# 	if my_form.is_valid():
-# 		print(my_form.cleaned_data)
-# 		activity = Participant.objects.filter(first_name=str, admin=request.user)
-# 		for i in activity:
-# 			my_form.cleaned_data.update({'user': i})
-# 		print(my_form.cleaned_data)
-# 		my_form.save()
-# 		return redirect('/home/')
-# 	return render(request, 'activity.html', {'form': my_form})
+@login_required
+def edit_activity(request, pk):
+	activity = Activity.objects.get(id=pk)
+	if activity.activity_type == 'Biking':
+		my_form = EditActivity(request.POST or None, initial={'activity_type': activity.activity_type, 'date': activity.date, 'miles': activity.miles*2})
+	else:
+		my_form = EditActivity(request.POST or None, initial={'activity_type': activity.activity_type, 'date': activity.date, 'miles': activity.miles})
+	if my_form.is_valid():
+		my_form.save(activity.user)
+		return redirect('/home/')
+	return render(request, 'activity.html', {'form': my_form})
 
 @login_required
 def create_activity(request, str):
@@ -58,7 +56,6 @@ def create_activity(request, str):
 			my_dict.update({'user': participants[0]})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
-			print(my_dict)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/')
 	return render(request, 'activity.html', {'form': my_form})
