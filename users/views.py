@@ -46,6 +46,14 @@ def edit_activity(request, pk):
 	return render(request, 'activity.html', {'form': my_form})
 
 @login_required
+def delete_activity(request, pk):
+	activity = get_object_or_404(Activity, id=pk)
+	if request.method == 'POST':
+		activity.delete()
+		return redirect('/home/')
+	return render(request, 'delete_activity.html', {})
+
+@login_required
 def create_activity(request, str):
 	my_form = CreateActivity()
 	if request.method == 'POST':

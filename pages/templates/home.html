@@ -17,6 +17,7 @@
 				    <th>Activity_Type</th>
 				    <th>Miles</th>
 				    <th>Edit</th>
+				    <th>Delete</th>
 				</tr>
 				{% for item in value.ParticipantActivities %}
 					{% for activity in item %}
@@ -24,7 +25,8 @@
 							<td>{{ activity.date }}</td>
 							<td>{{ activity.activity_type }}</td>
 							<td>{{ activity.miles|floatformat }}</td>
-							<td><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit activity</button></a></td>
+							<td><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit</button></a></td>
+							<td><a href="/delete_activity/{{ activity.pk }}"><button type="button">Delete</button></a></td>
 						</tr>
 				{% endfor %}{% endfor %}
 			</table>
