@@ -9,8 +9,9 @@ class Participant(models.Model):
 	admin = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Activity(models.Model):
-	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Push-ups','Push-ups'), ('Sit-ups','Sit-ups')]
+	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Push-ups','Push-ups'), ('Sit-ups','Sit-ups'), ('Wall-sits','Wall-sits' )]
 	activity_type = models.CharField(max_length=10, choices=activity_choices)
 	date = models.DateField()
 	user = models.ForeignKey(Participant, on_delete=models.CASCADE)
 	miles = models.DecimalField(max_digits=3, decimal_places=1)
+	time = models.DurationField(null=True)

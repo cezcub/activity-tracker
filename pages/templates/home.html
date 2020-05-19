@@ -16,6 +16,7 @@
 				    <th>Date</th>
 				    <th>Activity_Type</th>
 				    <th>Miles</th>
+				    <th>Time</th>
 				    <th>Edit</th>
 				    <th>Delete</th>
 				</tr>
@@ -25,6 +26,7 @@
 							<td>{{ activity.date }}</td>
 							<td>{{ activity.activity_type }}</td>
 							<td>{{ activity.miles|floatformat }}</td>
+							<td>{{ activity.time }}</td>
 							<td><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit</button></a></td>
 							<td><a href="/delete_activity/{{ activity.pk }}"><button type="button">Delete</button></a></td>
 						</tr>
