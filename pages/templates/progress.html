@@ -1,28 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load tags %}
 <table>
 	<tr>
-		<th>Name</th>
-		<th>Age group</th>
-		<th>Avg. Push-ups</th>
-		<th>Avg. Sit-ups</th>
-		<th>Total miles</th>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'age_group' '-' %}">Age Group</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ key.age_group }}</td>
-		{% for v in value %}
-		{% for v2 in v.values %}
-		{% if v2 is not None %}
-		<td>{{ v2|floatformat }}</td>
-		{% else %}
-		<td>0</td>
-		{% endif %}
-		{% endfor %}
-		{% endfor %}
+		<td>{{ value.push_average|floatformat }}</td>
+		<td>{{ value.sit_average|floatformat }}</td>
+		<td>{{ value.total_miles|floatformat }}</td>
 	</tr>
-{% endfor %}
+	{% endfor %}
 </table>
 {% endblock %}

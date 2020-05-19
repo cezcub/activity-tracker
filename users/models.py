@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Participant(models.Model):
 	age_groups = [('5 and below', '5 and below'), ('6-8','6-8'), ('9-11','9-11'), ('18+','18+')]
 	first_name = models.CharField(max_length=50)
-	age_group = models.CharField(max_length=10, choices=age_groups)
+	age_group = models.CharField(max_length=11, choices=age_groups)
 	admin = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Activity(models.Model):
