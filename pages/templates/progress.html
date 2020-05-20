@@ -2,8 +2,10 @@
 
 {% block content %}
 {% load tags %}
-<h1>5 and below</h1>
-{% if dict4  %}
+ <h4 class="image-text">Our first check-in will be on May 30th. <br><br> A suprise will be revealed for all the kids. <br><br>
+Make sure to put in your activities before 7:00 P.M.</h4>
+<h2>18+</h2>
+{% if dict %}
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
@@ -11,7 +13,7 @@
 		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
 	</tr>
-	{% for key, value in dict4.items %}
+	{% for key, value in dict.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
@@ -25,30 +27,7 @@
 {% endif %}
 <br>
 <br>
-<h1>6-8</h1>
-{% if dict3 %}
-<table>
-	<tr>
-		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
-	</tr>
-	{% for key, value in dict3.items %}
-	<tr>
-		<td>{{ key.first_name }}</td>
-		<td>{{ value.push_average|floatformat }}</td>
-		<td>{{ value.sit_average|floatformat }}</td>
-		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
-	</tr>
-	{% endfor %}
-</table>
-{% else %}
-<h3>No participants for this age group.</h3>
-{% endif %}
-<br>
-<br>
-<h1>9-11</h1>
+<h2>9-11</h2>
 {% if dict2 %}
 <table>
 	<tr>
@@ -71,8 +50,8 @@
 {% endif %}
 <br>
 <br>
-<h1>18+</h1>
-{% if dict %}
+<h2>6-8</h2>
+{% if dict3 %}
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
@@ -80,7 +59,30 @@
 		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
 	</tr>
-	{% for key, value in dict.items %}
+	{% for key, value in dict3.items %}
+	<tr>
+		<td>{{ key.first_name }}</td>
+		<td>{{ value.push_average|floatformat }}</td>
+		<td>{{ value.sit_average|floatformat }}</td>
+		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
+	</tr>
+	{% endfor %}
+</table>
+{% else %}
+<h3>No participants for this age group.</h3>
+{% endif %}
+<br>
+<br>
+<h2>5 and below</h2>
+{% if dict4  %}
+<table>
+	<tr>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
+	</tr>
+	{% for key, value in dict4.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
