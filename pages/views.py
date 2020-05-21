@@ -6,6 +6,7 @@ from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from collections import OrderedDict 
 from operator import getitem
+from functools import reduce
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
@@ -32,8 +33,10 @@ def progress_view(request):
 	d2 = {}
 	d3 = {}
 	d4 = {}
+	d5 = {}
 	participants = Participant.objects.order_by('first_name')
 	order_by = request.GET.get('order_by', 'first_name')
+	order_group = request.GET.get('group', '18+')
 	if order_by not in ['total_miles', 'sit_average', 'push_average', '-total_miles', '-sit_average', '-push_average']:
 		participants = Participant.objects.order_by(order_by)
 	for i in participants:
@@ -46,32 +49,39 @@ def progress_view(request):
 				activities[key] = 0
 		if i.age_group == '18+':
 			activities.update({'progress': round(activities['total_miles'], 2)})
-			d.update({i: activities})
+			d5.update({i: activities})
 		elif i.age_group == '9-11':
 			activities.update({'progress': round((activities['total_miles']/70)*100, 2)})
 			d2.update({i: activities})
 		elif i.age_group == '6-8':
-			activities.update({'progress': round(activities['total_miles']*2)})
+			activities.update({'progress': round(activities['total_miles']*2, 2)})
 			d3.update({i: activities})
 		elif i.age_group == '5 and below':
-			activities.update({'progress': round((activities['total_miles']/30)*100)})
+			activities.update({'progress': round((activities['total_miles']/30)*100, 2)})
 			d4.update({i: activities})
+	
+	if d5:
+		d.update({'18+': d5})
+	if d2:
+		d.update({'9-11': d2})
+	if d3:
+		d.update({"6-8": d3})
+	if d4:
+		d.update({"5 and below": d4})
+	
 	if order_by == 'total_miles':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'total_miles'), reverse=True))
+		d = OrderedDict(sorted(d.items(), key = lambda x: reduce(lambda val, key: val.get(key) if val else 0, ['total_miles'], x[1]), reverse=True))
 	elif order_by == '-total_miles':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'total_miles')))
+		d = OrderedDict(sorted(d.items(), key = lambda x: reduce(lambda val, key: print(val.get(key)) if val else 0, ['total_miles'], x)))
 	elif order_by == 'push_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'push_average'), reverse=True))
+		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1][1], 'push_average'), reverse=True))
 	elif order_by == '-push_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'push_average')))
+		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1][1], 'push_average')))
 	elif order_by == 'sit_average':
 		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'sit_average'), reverse=True))
 	elif order_by == '-sit_average':
 		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'sit_average')))
 	context = {
 		"dict": d,
-		"dict2": d2,
-		"dict3": d3,
-		"dict4": d4
 	}
 	return render(request, 'progress.html', context)
