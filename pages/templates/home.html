@@ -6,29 +6,24 @@
 		<li><h3>{{ value.ParticipantDetails.first_name }}</h3><a href = '/create_activity/{{ value.ParticipantDetails.first_name }}'><button type="button">Create a new activity for {{ value.ParticipantDetails.first_name }}</button></a><a href = '/delete_participant/{{ value.ParticipantDetails.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
 		<br>
 		<br>
-			<style>
-				table, th, td {
-			  		border: 1px solid black;
-				}
-			</style>
 			<table style="width: 50%">
 				<tr>
-				    <th>Date</th>
-				    <th>Activity_Type</th>
-				    <th>Miles</th>
-				    <th>Time</th>
-				    <th>Edit</th>
-				    <th>Delete</th>
+				    <th class="padded">Date</th>
+				    <th class="padded">Activity_Type</th>
+				    <th class="padded">Miles</th>
+				    <th class="padded">Time</th>
+				    <th class="padded">Edit</th>
+				    <th class="padded">Delete</th>
 				</tr>
 				{% for item in value.ParticipantActivities %}
 					{% for activity in item %}
 						<tr>
-							<td>{{ activity.date }}</td>
-							<td>{{ activity.activity_type }}</td>
-							<td>{{ activity.miles|floatformat }}</td>
-							<td>{{ activity.time }}</td>
-							<td><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit</button></a></td>
-							<td><a href="/delete_activity/{{ activity.pk }}"><button type="button">Delete</button></a></td>
+							<td class="padded">{{ activity.date }}</td>
+							<td class="padded">{{ activity.activity_type }}</td>
+							<td class="padded">{{ activity.miles|floatformat }}</td>
+							<td class="padded">{{ activity.time }}</td>
+							<td class="padded"><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit</button></a></td>
+							<td class="padded"><a href="/delete_activity/{{ activity.pk }}"><button type="button">Delete</button></a></td>
 						</tr>
 				{% endfor %}{% endfor %}
 			</table>

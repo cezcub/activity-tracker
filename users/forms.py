@@ -18,7 +18,7 @@ class EditActivity(forms.ModelForm):
 	miles = forms.DecimalField(max_digits=3, decimal_places=1, label='Miles/Number', help_text='Enter miles for Biking/Walking/Running, or number for Sit-ups/Push-ups')
 	class Meta:
 		model = Activity
-		fields = ['activity_type', 'date', 'miles']
+		fields = ['activity_type', 'date', 'miles', 'time']
 
 	def save(self, user=None):
 		activity = super(EditActivity, self).save(commit=False)

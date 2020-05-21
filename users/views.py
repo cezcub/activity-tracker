@@ -35,7 +35,8 @@ def create_participant(request):
 
 @login_required
 def edit_activity(request, pk):
-	activity = Activity.objects.get(id=pk)
+	participants = Participant.objects.filter(admin=request.user)
+	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if activity.activity_type == 'Biking':
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles*2})
 	else:
@@ -47,7 +48,8 @@ def edit_activity(request, pk):
 
 @login_required
 def delete_activity(request, pk):
-	activity = get_object_or_404(Activity, id=pk)
+	participants = Participant.objects.filter(admin=request.user)
+	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if request.method == 'POST':
 		activity.delete()
 		return redirect('/home/')
