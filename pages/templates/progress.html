@@ -4,21 +4,21 @@
 {% load tags %}
  <h4 class="image-text">Our first check-in will be on May 30th. <br><br> A suprise will be revealed for all the kids. <br><br>
 Make sure to put in your activities before 7:00 P.M.</h4>
-<h2>18+</h2>
+<h2 id="18+">18+</h2>
 {% if dict %}
 <table>
 	<tr>
-		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#18+">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#18+">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#18+">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#18+">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
-		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
+		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% endfor %}
 </table>
@@ -27,21 +27,21 @@ Make sure to put in your activities before 7:00 P.M.</h4>
 {% endif %}
 <br>
 <br>
-<h2>9-11</h2>
+<h2 id="9-11">9-11</h2>
 {% if dict2 %}
 <table>
 	<tr>
-		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#9-11">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#9-11">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#9-11">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#9-11">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict2.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
-		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
+		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% endfor %}
 </table>
@@ -50,21 +50,21 @@ Make sure to put in your activities before 7:00 P.M.</h4>
 {% endif %}
 <br>
 <br>
-<h2>6-8</h2>
+<h2 id="6-8">6-8</h2>
 {% if dict3 %}
 <table>
 	<tr>
-		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#6-8">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#6-8">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#6-8">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#6-8">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict3.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
-		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
+		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% endfor %}
 </table>
@@ -73,21 +73,21 @@ Make sure to put in your activities before 7:00 P.M.</h4>
 {% endif %}
 <br>
 <br>
-<h2>5 and below</h2>
+<h2 id="5_and_below">5 and below</h2>
 {% if dict4  %}
 <table>
 	<tr>
-		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}">Avg. Sit-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}">Total Miles</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#5_and_below">Name</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#5_and_below">Avg. Push-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#5_and_below">Avg. Sit-ups</a></th>
+		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#5_and_below">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict4.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
-		<td>{{ value.total_miles|floatformat }} <br><progress value="{{ value.progress }}" max="100"></td>
+		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% endfor %}
 </table>

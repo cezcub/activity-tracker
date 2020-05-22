@@ -6,6 +6,7 @@ from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from collections import OrderedDict 
 from operator import getitem
+from datetime import date
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
@@ -28,6 +29,12 @@ def home_view(request):
 
 @login_required
 def progress_view(request):
+	start_date = date(2020, 5, 15)
+	end_date = date(2020, 6, 30)
+	current_date = date.today()
+	date_diff = current_date - start_date
+	total_days = end_date - start_date
+	percentage_days = round((date_diff.days/total_days.days)*100)
 	d = {}
 	d2 = {}
 	d3 = {}
@@ -46,15 +53,39 @@ def progress_view(request):
 				activities[key] = 0
 		if i.age_group == '18+':
 			activities.update({'progress': round(activities['total_miles'], 2)})
+			if activities['progress'] - 20 >= percentage_days:
+				activities.update({'class': 'flair'})
+			elif activities['progress'] >= percentage_days:
+				activities.update({'class': 'green'})
+			elif activities['progress'] < percentage_days:
+				activities.update({'class': 'red'})
 			d.update({i: activities})
 		elif i.age_group == '9-11':
 			activities.update({'progress': round((activities['total_miles']/70)*100, 2)})
+			if activities['progress'] - 20 >= percentage_days:
+				activities.update({'class': 'flair'})
+			elif activities['progress'] >= percentage_days:
+				activities.update({'class': 'green'})
+			elif activities['progress'] < percentage_days:
+				activities.update({'class': 'red'})
 			d2.update({i: activities})
 		elif i.age_group == '6-8':
 			activities.update({'progress': round(activities['total_miles']*2)})
+			if activities['progress'] - 20 >= percentage_days:
+				activities.update({'class': 'flair'})
+			elif activities['progress'] >= percentage_days:
+				activities.update({'class': 'green'})
+			elif activities['progress'] < percentage_days:
+				activities.update({'class': 'red'})
 			d3.update({i: activities})
 		elif i.age_group == '5 and below':
 			activities.update({'progress': round((activities['total_miles']/30)*100)})
+			if activities['progress'] - 20 >= percentage_days:
+				activities.update({'class': 'flair'})
+			elif activities['progress'] >= percentage_days:
+				activities.update({'class': 'green'})
+			elif activities['progress'] < percentage_days:
+				activities.update({'class': 'red'})
 			d4.update({i: activities})
 	if order_by == 'total_miles':
 		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'total_miles'), reverse=True))
@@ -90,6 +121,7 @@ def progress_view(request):
 		"dict": d,
 		"dict2": d2,
 		"dict3": d3,
-		"dict4": d4
+		"dict4": d4,
+		"progress": [start_date, end_date, date_diff, current_date, percentage_days, total_days]
 	}
 	return render(request, 'progress.html', context)
