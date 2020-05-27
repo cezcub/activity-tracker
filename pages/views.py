@@ -6,6 +6,7 @@ from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from collections import OrderedDict 
 from operator import getitem
+from django.core.paginator import Paginator
 from datetime import date
 
 # Create your views here.
@@ -17,13 +18,15 @@ def index_view(request, *args, **kwargs):
 def home_view(request):
 	participants2 = {}
 	participants = Participant.objects.filter(admin=request.user)
-	for i in range(len(participants)):
-		activities = []
-		activity = Activity.objects.filter(user=participants[i])
-		activities.append(Activity.objects.filter(user=participants[i]))
-		participants2.update({i: {"ParticipantDetails": participants[i], "ParticipantActivities": activities}})
+	for i in participants:
+		activity = Activity.objects.filter(user=i).order_by('-date')
+		paginator = Paginator(activity, 2)
+		page_number = request.GET.get('page')
+		page = paginator.get_page(page_number)
+		participants2.update({i: page})
 	context={
 		'participants': participants2,
+		'current_page': page_number,
 	}
 	return render(request, 'home.html', context)
 

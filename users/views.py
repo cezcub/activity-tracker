@@ -28,7 +28,7 @@ def create_participant(request):
 			my_dict = my_form.cleaned_data
 			my_dict.update({'admin': request.user})
 			Participant.objects.create(**my_dict)
-			return redirect('/home/')
+			return redirect('/home/?page=1')
 		else:
 			return my_form.errors
 	return render(request, 'participant.html', {'form': my_form})
@@ -43,7 +43,7 @@ def edit_activity(request, pk):
 		my_form = EditActivity(request.POST or None, instance=activity)
 	if my_form.is_valid():
 		my_form.save(activity.user)
-		return redirect('/home/')
+		return redirect('/home/?page=1')
 	return render(request, 'activity.html', {'form': my_form})
 
 @login_required
@@ -52,7 +52,7 @@ def delete_activity(request, pk):
 	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if request.method == 'POST':
 		activity.delete()
-		return redirect('/home/')
+		return redirect('/home/?page=1')
 	return render(request, 'delete_activity.html', {})
 
 @login_required
@@ -67,7 +67,7 @@ def create_activity(request, str):
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
 			Activity.objects.create(**my_dict)
-			return redirect('/home/')
+			return redirect('/home/?page=1')
 	return render(request, 'activity.html', {'form': my_form})
 
 @login_required
@@ -75,5 +75,5 @@ def delete_participant(request, str):
 	participant = get_object_or_404(Participant, first_name=str, admin=request.user )
 	if request.method == 'POST':
 		participant.delete()
-		return redirect('/home/')
+		return redirect('/home/?page=1')
 	return render(request, 'delete_participant.html', {})
