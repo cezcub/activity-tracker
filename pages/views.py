@@ -20,7 +20,7 @@ def home_view(request):
 	participants = Participant.objects.filter(admin=request.user)
 	for i in participants:
 		activity = Activity.objects.filter(user=i).order_by('-date')
-		paginator = Paginator(activity, 2)
+		paginator = Paginator(activity, 10)
 		page_number = request.GET.get('page')
 		page = paginator.get_page(page_number)
 		participants2.update({i: page})
