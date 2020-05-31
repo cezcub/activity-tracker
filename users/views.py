@@ -62,8 +62,8 @@ def create_activity(request, str):
 		my_form = CreateActivity(request.POST)
 		if my_form.is_valid():
 			my_dict = my_form.cleaned_data
-			participants = get_object_or_404(Participant, first_name=str, admin=request.user)
-			my_dict.update({'user': participants[0]})
+			participant = get_object_or_404(Participant, first_name=str, admin=request.user)
+			my_dict.update({'user': participant})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
 			Activity.objects.create(**my_dict)
