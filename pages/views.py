@@ -18,10 +18,10 @@ def index_view(request, *args, **kwargs):
 def home_view(request):
 	participants2 = {}
 	participants = Participant.objects.filter(admin=request.user)
+	page_number = request.GET.get('page')
 	for i in participants:
 		activity = Activity.objects.filter(user=i).order_by('-date')
 		paginator = Paginator(activity, 10)
-		page_number = request.GET.get('page')
 		page = paginator.get_page(page_number)
 		participants2.update({i: page})
 	context={
@@ -125,6 +125,5 @@ def progress_view(request):
 		"dict2": d2,
 		"dict3": d3,
 		"dict4": d4,
-		"progress": [start_date, end_date, date_diff, current_date, percentage_days, total_days]
 	}
 	return render(request, 'progress.html', context)
