@@ -62,6 +62,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 100:
+				activities.update({'complete': True})
 			d.update({i: activities})
 		elif i.age_group == '9-11':
 			activities.update({'progress': round((activities['total_miles']/70)*100, 2)})
@@ -71,6 +73,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 100:
+				activities.update({'complete': True})
 			d2.update({i: activities})
 		elif i.age_group == '6-8':
 			activities.update({'progress': round(activities['total_miles']*2)})
@@ -80,6 +84,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 100:
+				activities.update({'complete': True})
 			d3.update({i: activities})
 		elif i.age_group == '5 and below':
 			activities.update({'progress': round((activities['total_miles']/30)*100)})
@@ -89,6 +95,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 100:
+				activities.update({'complete': True})
 			d4.update({i: activities})
 	if order_by == 'total_miles':
 		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'total_miles'), reverse=True))

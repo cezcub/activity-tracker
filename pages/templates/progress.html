@@ -18,6 +18,9 @@
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
+	{% if value.complete %}
+	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	{% endif %}
 	</tr>
 	{% endfor %}
 </table>
@@ -41,6 +44,9 @@
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
+	{% if value.complete %}
+	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	{% endif %}
 	</tr>
 	{% endfor %}
 </table>
@@ -64,6 +70,9 @@
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
+	{% if value.complete %}
+	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>	
+	{% endif %}
 	</tr>
 	{% endfor %}
 </table>
@@ -87,6 +96,10 @@
 		<td>{{ value.push_average|floatformat }}</td>
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
+	</tr>
+	{% if value.complete %}
+	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	{% endif %}
 	</tr>
 	{% endfor %}
 </table>
