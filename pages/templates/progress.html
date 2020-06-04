@@ -19,7 +19,7 @@
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
-	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
 	{% endif %}
 	</tr>
 	{% endfor %}
@@ -45,7 +45,7 @@
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
-	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
 	{% endif %}
 	</tr>
 	{% endfor %}
@@ -71,7 +71,7 @@
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
-	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>	
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>	
 	{% endif %}
 	</tr>
 	{% endfor %}
@@ -98,7 +98,7 @@
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% if value.complete %}
-	<td><h4 style="color: red;"> Congratulations! You completed your goal! </h4></td>
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
 	{% endif %}
 	</tr>
 	{% endfor %}
