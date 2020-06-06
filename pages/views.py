@@ -56,8 +56,9 @@ def superuser_profile(request, name):
 		context={
 			'participants': participants2,
 			'current_page': page_number,
+			'username': name
 		}
-		return render(request, 'home.html', context)
+		return render(request, 'home-superuser.html', context)
 
 @login_required
 def progress_view(request):

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, models
 from .forms import CreateParticipant, CreateActivity, SignUpForm, EditActivity
 from django.contrib.auth.decorators import login_required
 from .models import Participant, Activity
+from django.http import Http404
 
 # Create your views here.
 def create_user(request):
@@ -29,13 +30,14 @@ def create_participant(request):
 			my_dict.update({'admin': request.user})
 			Participant.objects.create(**my_dict)
 			return redirect('/home/?page=1')
-		else:
-			return my_form.errors
 	return render(request, 'participant.html', {'form': my_form})
 
 @login_required
 def edit_activity(request, pk):
-	participants = Participant.objects.filter(admin=request.user)
+	if request.user.is_superuser:
+		participants = Participant.objects.all()
+	else:
+		participants = Participant.objects.filter(admin=request.user)
 	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if activity.activity_type == 'Biking':
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles*2})
@@ -48,7 +50,10 @@ def edit_activity(request, pk):
 
 @login_required
 def delete_activity(request, pk):
-	participants = Participant.objects.filter(admin=request.user)
+	if request.user.is_superuser:
+		participants = Participant.objects.all()
+	else:
+		participants = Participant.objects.filter(admin=request.user)
 	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if request.method == 'POST':
 		activity.delete()
@@ -72,8 +77,41 @@ def create_activity(request, str):
 
 @login_required
 def delete_participant(request, str):
-	participant = get_object_or_404(Participant, first_name=str, admin=request.user )
+	participant = get_object_or_404(Participant, first_name=str, admin=request.user)
 	if request.method == 'POST':
 		participant.delete()
 		return redirect('/home/?page=1')
 	return render(request, 'delete_participant.html', {})
+
+@login_required
+def superuser_activity(request, str, name):
+	if not request.user.is_superuser:
+		raise Http404
+	my_form = CreateActivity()
+	if request.method == 'POST':
+		my_form = CreateActivity(request.POST)
+		if my_form.is_valid():
+			my_dict = my_form.cleaned_data
+			user = models.User.objects.get(username=name)
+			participant = get_object_or_404(Participant, first_name=str, admin=user)
+			my_dict.update({'user': participant})
+			if my_dict['activity_type'] == "Biking":
+				my_dict['miles'] = my_dict['miles']/2
+			Activity.objects.create(**my_dict)
+			return redirect('/home/?page=1')
+	return render(request, 'activity.html', {'form': my_form})
+
+@login_required
+def superuser_participant(request, name):
+	if not request.user.is_superuser:
+		raise Http404
+	user = models.User.objects.get(username=name)
+	my_form = CreateParticipant()
+	if request.method == 'POST':
+		my_form = CreateParticipant(request.POST)
+		if my_form.is_valid():
+			my_dict = my_form.cleaned_data
+			my_dict.update({'admin': user})
+			Participant.objects.create(**my_dict)
+			return redirect('/home/?page=1')
+	return render(request, 'participant.html', {'form': my_form})
