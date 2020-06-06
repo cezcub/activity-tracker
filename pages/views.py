@@ -8,6 +8,8 @@ from collections import OrderedDict
 from operator import getitem
 from django.core.paginator import Paginator
 from datetime import date
+from django.contrib.auth.models import User
+from django.http import Http404
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
@@ -16,19 +18,46 @@ def index_view(request, *args, **kwargs):
 
 @login_required
 def home_view(request):
-	participants2 = {}
-	participants = Participant.objects.filter(admin=request.user)
-	page_number = request.GET.get('page')
-	for i in participants:
-		activity = Activity.objects.filter(user=i).order_by('-date')
-		paginator = Paginator(activity, 10)
-		page = paginator.get_page(page_number)
-		participants2.update({i: page})
-	context={
-		'participants': participants2,
-		'current_page': page_number,
-	}
-	return render(request, 'home.html', context)
+	if request.user.is_superuser:
+		queryset = User.objects.all()
+		context = {
+			'objects': queryset
+		}
+		return render(request, 'list.html', context)
+	else:
+		participants2 = {}
+		participants = Participant.objects.filter(admin=request.user)
+		page_number = request.GET.get('page')
+		for i in participants:
+			activity = Activity.objects.filter(user=i).order_by('-date')
+			paginator = Paginator(activity, 10)
+			page = paginator.get_page(page_number)
+			participants2.update({i: page})
+		context={
+			'participants': participants2,
+			'current_page': page_number,
+		}
+		return render(request, 'home.html', context)
+
+@login_required
+def superuser_profile(request, name):
+	if not request.user.is_superuser:
+		raise Http404
+	else:
+		profile = User.objects.get(username=name)
+		participants2 = {}
+		participants = Participant.objects.filter(admin=profile)
+		page_number = request.GET.get('page')
+		for i in participants:
+			activity = Activity.objects.filter(user=i).order_by('-date')
+			paginator = Paginator(activity, 10)
+			page = paginator.get_page(page_number)
+			participants2.update({i: page})
+		context={
+			'participants': participants2,
+			'current_page': page_number,
+		}
+		return render(request, 'home.html', context)
 
 @login_required
 def progress_view(request):

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for i in objects %}
+<a href="/home/{{ i.username }}">{{ i.username }}</a>
+<br>
+{% endfor %}
+<a href="/admin/"><button>Admin</button></a>
+
+{% endblock %}
