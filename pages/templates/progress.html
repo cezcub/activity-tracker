@@ -4,6 +4,22 @@
 {% load tags %}
  <h4 class="image-text"> <div> June 30th will be the final check-in. </div> <br> <div style="color:rgb(137, 0, 242);"> All kids will recieve prizes! </div> <br> <div style="color:rgb(0, 180, 0);"> The more miles over your goal that you do, the bigger your prize will be. </div> <br> <div style="color: red;"> Keep up the great work! </div> </h4>
 <h2 id="18+">18+</h2>
+<ol style="float: right;position: relative;right: 20%;">
+	<h1 style="background-image: url(https://i.pinimg.com/474x/8c/2e/2b/8c2e2b8cff722ae2f3db9c6748b87617.jpg);text-align: center;font-size: 45px;padding: 5px;">Top runners</h1>
+	<li style="font-size: 30px;color: gold;"><img src="https://p7.hiclipart.com/preview/351/454/468/bronze-medal-silver-medal-gold-medal-olympic-medal-vector-painted-medals.jpg" style="width: 20px;">{{ 5_runners.0.first_name }}   -  {{ 5_runners.0.total_miles }} miles running</li>
+	<li style="font-size: 30px;color: silver;"><img src="https://p7.hiclipart.com/preview/352/598/329/silver-medal-gold-medal-medal-silver.jpg" style="width: 20px;">{{ 5_runners.1.first_name }}   -  {{ 5_runners.1.total_miles }} miles running</li>
+	<li style="font-size: 30px;color: rgb(205, 127, 50);"><img src="https://p7.hiclipart.com/preview/330/632/45/gold-medal-silver-medal-bronze-medal-olympic-medal-medal.jpg" style="width: 20px;">{{ 5_runners.2.first_name }}   -  {{ 5_runners.2.total_miles }} miles running</li>
+	<li style="font-size: 30px;">{{ 5_runners.3.first_name }}   -  {{ 5_runners.3.total_miles }} miles running</li>
+	<li style="font-size: 30px;">{{ 5_runners.4.first_name }}   -  {{ 5_runners.4.total_miles }} miles running</li>
+	{% if full_leaderboard %}
+		{% for i in other_runners %}
+		<li style="font-size: 30px;">{{ i.first_name }}  -  {{ i.total_miles }} miles running</li>
+		{% endfor %}
+		<a href="?order_by={{ url }}&full_leaderboard=False"><button style="width: 100%;font-size: 25px;">Show less</button></a>
+	{% else %}
+		<a href="?order_by={{ url }}&full_leaderboard=True"><button style="width: 100%;font-size: 25px;">Show more</button></a>
+	{% endif %}
+</ol>
 {% if dict %}
 <table>
 	<tr>

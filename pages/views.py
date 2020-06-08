@@ -158,10 +158,17 @@ def progress_view(request):
 		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'sit_average')))
 		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'sit_average')))
 		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'sit_average')))
+	queryset1 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:5]
+	queryset2 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[5:]
 	context = {
 		"dict": d,
 		"dict2": d2,
 		"dict3": d3,
 		"dict4": d4,
+		"5_runners": queryset1,
+		"other_runners": queryset2,
+		"url": order_by
 	}
+	if request.GET.get("full_leaderboard") == "True":
+		context.update({"full_leaderboard": True})
 	return render(request, 'progress.html', context)
