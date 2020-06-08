@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+	{% for key, value in participants.items %}
+		<li><h3>{{ key.first_name }}</h3><a href = '/create_activity/{{ key.first_name }}/{{ username }}'><button type="button">Create a new activity for {{ key.first_name }}</button></a><a href = '/admin/users/participant/{{ key.id }}/delete'><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
+		<br>
+		<br>
+			<table style="width: 50%">
+				<tr>
+					<th class="padded">Date</th>
+					<th class="padded">Activity_Type</th>
+					<th class="padded">Miles</th>
+					<th class="padded">Time</th>
+					<th class="padded">Edit</th>
+					<th class="padded">Delete</th>
+				</tr>
+				{% for activity in value %}
+						<tr>
+							<td class="padded">{{ activity.date }}</td>
+							<td class="padded">{{ activity.activity_type }}</td>
+							<td class="padded">{{ activity.miles|floatformat }}</td>
+							<td class="padded">{{ activity.time }}</td>
+							<td class="padded"><a href="/edit_activity/{{ activity.pk }}"><button type="button">Edit</button></a></td>
+							<td class="padded"><a href="/delete_activity/{{ activity.pk }}"><button type="button">Delete</button></a></td>
+						</tr>
+				{% endfor %}
+			</table>
+		</li>
+	{% if value.has_previous %}
+	<a href="?page={{ value.previous_page_number }}"><button>&lsaquo;</button></a>
+	{% else %}
+	<a href="?page=1"><button>&lsaquo;</button></a>
+	{% endif %}
+	{% for i in value.paginator.page_range %}
+	<a href="?page={{ i }}"><button>{{ i }}</button></a>
+	{% endfor %}
+	{% if value.has_next %}
+	<a href="?page={{ value.next_page_number }}"><button>&rsaquo;</button></a>
+	{% else %}
+	<a href="?page={{ current_page }}"><button>&rsaquo;</button></a>
+	{% endif %}
+{% endfor %}
+</ul>
+
+<a href = '/create_participant/{{ name }}'><button type="button">Create a new participant</button></a>
+{% endblock %}
