@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1 style="font-size: 100px;" class="center">Only {{ date }} days left to go!</h1>
 <ul>
 	{% for key, value in participants.items %}
 		<li><h3>{{ key.first_name }}</h3><a href = '/create_activity/{{ key.first_name }}'><button type="button">Create a new activity for {{ key.first_name }}</button></a><a href = '/delete_participant/{{ key.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
@@ -42,7 +43,43 @@
 	{% endif %}
 {% endfor %}
 </ul>
+{% if not answered %}
+<button style="background-color: lightblue;font-size: 25px;" onclick="openPopup()">Trivia question of the day!</button>
+<br>
+<div id="popup-1">
+	<div class="popup-content">
+		<h1>What is the sweetest and most romantic fruit?</h1>
+		<h5>You only have <span id="counter">30</span> seconds left to answer!</h5>
+		<form method="POST" id="myForm"> {% csrf_token %}
+			{{ form.as_p }}
+		<input type="submit" value="Enter"/>
+		</form>
+		<script type="text/javascript">
+			function countdown(){
+				var popup = document.getElementById("popup-1")
+				var count = document.getElementById("counter")
+				var form = document.getElementById("myForm")
 
+				count.innerHTML = parseInt(count.innerHTML)-1;
+
+				if (parseInt(count.innerHTML)<=0){
+				popup.style.display="none";
+				form.answer.value='None';
+				form.submit();				}
+			}
+		</script>
+		<script type="text/javascript">
+			function openPopup(){
+				var popup1 = document.getElementById("popup-1")
+				popup1.style.display="block";
+				window.scrollBy(0, 700)
+				window.setInterval(countdown, 1000);
+			}
+</script>
+	</div>
+</div>
+{% else %}
+	<h5>You've already answered today's question! Come back tommorow for more!</h5>
+{% endif %}
 <a href = '/create_participant/'><button type="button">Create a new participant</button></a>
 {% endblock %}
-

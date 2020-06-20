@@ -30,7 +30,7 @@ def create_participant(request):
 			my_dict.update({'admin': request.user})
 			Participant.objects.create(**my_dict)
 			return redirect('/home/?page=1')
-	return render(request, 'participant.html', {'form': my_form})
+	return render(request, 'formt.html', {'form': my_form})
 
 @login_required
 def edit_activity(request, pk):
@@ -46,7 +46,7 @@ def edit_activity(request, pk):
 	if my_form.is_valid():
 		my_form.save(activity.user)
 		return redirect('/home/?page=1')
-	return render(request, 'activity.html', {'form': my_form})
+	return render(request, 'form.html', {'form': my_form})
 
 @login_required
 def delete_activity(request, pk):
@@ -73,7 +73,7 @@ def create_activity(request, str):
 				my_dict['miles'] = my_dict['miles']/2
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
-	return render(request, 'activity.html', {'form': my_form})
+	return render(request, 'form.html', {'form': my_form})
 
 @login_required
 def delete_participant(request, str):
@@ -99,7 +99,7 @@ def superuser_activity(request, str, name):
 				my_dict['miles'] = my_dict['miles']/2
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
-	return render(request, 'activity.html', {'form': my_form})
+	return render(request, 'form.html', {'form': my_form})
 
 @login_required
 def superuser_participant(request, name):

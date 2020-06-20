@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from users.models import Participant, Activity
 from django.db.models import Avg, Sum
@@ -7,13 +7,18 @@ from django.db.models.functions import Cast
 from collections import OrderedDict 
 from operator import getitem
 from django.core.paginator import Paginator
-from datetime import date
+from datetime import date, timedelta, datetime, timezone
 from django.contrib.auth.models import User
 from django.http import Http404
+from .forms import TriviaForm
+from .models import Trivia
+import json
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
-	context = {}
+	context = {
+		'date': abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
+	}
 	return render(request, 'index.html', context)
 
 @login_required
@@ -33,10 +38,26 @@ def home_view(request):
 			paginator = Paginator(activity, 10)
 			page = paginator.get_page(page_number)
 			participants2.update({i: page})
+		queryset = Trivia.objects.filter(date=datetime.now(timezone(timedelta(hours=-5))))
+		answered = []
+		for i in queryset:
+			answered.append(i.user)
+		my_form = TriviaForm()
+		if request.method == "POST" and request.user not in answered:
+			my_form = TriviaForm(request.POST)
+			if my_form.is_valid():
+				my_dict = my_form.cleaned_data
+				my_dict.update({"date": date.today(), "user": request.user})
+				Trivia.objects.create(**my_dict)
+				return redirect('/home/?page=1')
 		context={
 			'participants': participants2,
 			'current_page': page_number,
+			'form': my_form,
+			'date': abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
 		}
+		if request.user in answered:
+			context.update({"answered": True})
 		return render(request, 'home.html', context)
 
 @login_required
@@ -167,8 +188,9 @@ def progress_view(request):
 		"dict4": d4,
 		"5_runners": queryset1,
 		"other_runners": queryset2,
-		"url": order_by
+		"url": order_by,
+		"date": abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
 	}
 	if request.GET.get("full_leaderboard") == "True":
 		context.update({"full_leaderboard": True})
-	return render(request, 'progress.html', context)
+	return render(request, 'progress.html', context)\
