@@ -47,7 +47,7 @@ def home_view(request):
 			my_form = TriviaForm(request.POST)
 			if my_form.is_valid():
 				my_dict = my_form.cleaned_data
-				my_dict.update({"date": date.today(), "user": request.user})
+				my_dict.update({"date": datetime.now(timezone(timedelta(hours=-5))), "user": request.user})
 				Trivia.objects.create(**my_dict)
 				return redirect('/home/?page=1')
 		context={
@@ -193,4 +193,4 @@ def progress_view(request):
 	}
 	if request.GET.get("full_leaderboard") == "True":
 		context.update({"full_leaderboard": True})
-	return render(request, 'progress.html', context)\
+	return render(request, 'progress.html', context)
