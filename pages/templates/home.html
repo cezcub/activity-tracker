@@ -3,12 +3,13 @@
 {% block content %}
 <h1 style="font-size: 100px;" class="center">Only {{ date }} days left to go!</h1>
 
+<h2> The answer to yesterdays question, What is the sweetest and most romantic fruit?, was honeydew.</h2>
 {% if not answered %}
 <button style="background-color: lightblue;font-size: 40px;display: block;" onclick="openPopup()" class="center">Trivia question of the day!</button>
 <br>
 <div id="popup-1">
 	<div class="popup-content">
-		<h1>What is the sweetest and most romantic fruit?</h1>
+		<h1>I have a big mouth and I am also quite loud! I am NOT a gossip but I do get involved with everyone's dirty business. What am I?</h1>
 		<h5>You only have <span id="counter">30</span> seconds left to answer!</h5>
 		<form method="POST" id="myForm"> {% csrf_token %}
 			{{ form.as_p }}
