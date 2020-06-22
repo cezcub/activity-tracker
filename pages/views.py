@@ -47,7 +47,7 @@ def home_view(request):
 			my_form = TriviaForm(request.POST)
 			if my_form.is_valid():
 				my_dict = my_form.cleaned_data
-				my_dict.update({"date": datetime.now(timezone(timedelta(hours=-5)).date()), "user": request.user})
+				my_dict.update({"date": datetime.now(timezone(timedelta(hours=-5))).date(), "user": request.user})
 				Trivia.objects.create(**my_dict)
 				return redirect('/home/?page=1')
 		context={
