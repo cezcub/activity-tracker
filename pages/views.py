@@ -58,6 +58,14 @@ def home_view(request):
 		}
 		if request.user in answered:
 			context.update({"answered": True})
+		yesterdays_answers = Trivia.objects.filter(date=(datetime.now(timezone(timedelta(hours=-5))).date() - timedelta(days=1)))
+		for i in yesterdays_answers:
+			if request.user == i.user:
+				if i.answer.lower() == "vacuum cleaner":
+					context.update({"correct": True})
+				break
+		else:
+			context.update({"correct": "unanswered"})
 		return render(request, 'home.html', context)
 
 @login_required
