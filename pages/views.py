@@ -61,7 +61,7 @@ def home_view(request):
 		yesterdays_answers = Trivia.objects.filter(date=(datetime.now(timezone(timedelta(hours=-5))).date() - timedelta(days=1)))
 		for i in yesterdays_answers:
 			if request.user == i.user:
-				if i.answer.lower() == "vacuum cleaner":
+				if i.answer.lower() == "phillipines sea":
 					context.update({"correct": True})
 				break
 		else:
@@ -102,7 +102,7 @@ def progress_view(request):
 	d3 = {}
 	d4 = {}
 	participants = Participant.objects.order_by('first_name')
-	order_by = request.GET.get('order_by', 'first_name')
+	order_by = request.GET.get('order_by', 'total_miles')
 	if order_by not in ['total_miles', 'sit_average', 'push_average', '-total_miles', '-sit_average', '-push_average']:
 		participants = Participant.objects.order_by(order_by)
 	for i in participants:
