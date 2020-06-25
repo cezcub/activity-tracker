@@ -61,7 +61,7 @@ def home_view(request):
 		yesterdays_answers = Trivia.objects.filter(date=(datetime.now(timezone(timedelta(hours=-5))).date() - timedelta(days=1)))
 		for i in yesterdays_answers:
 			if request.user == i.user:
-				if i.answer.lower() == "phillipines sea":
+				if i.answer.lower() == "barber":
 					context.update({"correct": True})
 				break
 		else:
@@ -105,6 +105,7 @@ def progress_view(request):
 	order_by = request.GET.get('order_by', 'total_miles')
 	if order_by not in ['total_miles', 'sit_average', 'push_average', '-total_miles', '-sit_average', '-push_average']:
 		participants = Participant.objects.order_by(order_by)
+	doubles = []
 	for i in participants:
 		activities = {}
 		activities.update(Activity.objects.filter(user=i, activity_type='Push-ups').aggregate(push_average=Cast(Avg('miles'), IntegerField())))
@@ -121,7 +122,9 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
-			if activities['progress'] >= 100:
+			if activities['progress'] >= 200:
+				activities.update({'double': True, 'complete': True})
+			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d.update({i: activities})
 		elif i.age_group == '9-11':
@@ -132,6 +135,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 200:
+				activities.update({'double': True, 'complete': True})
 			if activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d2.update({i: activities})
@@ -143,6 +148,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 200:
+				activities.update({'double': True, 'complete': True})
 			if activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d3.update({i: activities})
@@ -154,6 +161,8 @@ def progress_view(request):
 				activities.update({'class': 'green'})
 			elif activities['progress'] < percentage_days:
 				activities.update({'class': 'red'})
+			if activities['progress'] >= 200:
+				activities.update({'double': True, 'complete': True})
 			if activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d4.update({i: activities})
