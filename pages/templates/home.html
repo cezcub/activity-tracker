@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 style="font-size: 100px;" class="center">Only {{ date }} days left to go!</h1>
+<h1 style="font-size: 100px;" class="center">Only {{ date }} day left to go!</h1>
 
 {% if correct == "unanswered" and not answered %}
-<h2 class="center"> The answer to yesterday's question was that the woman was a photographer. You didn't answer yesterdays question. Why don't you try today's?</h2>
+<h2 class="center"> The answer to yesterday's question was that all the cars made right turns. You didn't answer yesterdays question. Why don't you try today's?</h2>
 {% elif correct == "unanswered" and answered %}
-<h2 class="center"> The answer to yesterday's question was that the woman was a photographer.</h2>
+<h2 class="center"> The answer to yesterday's question was that all the cars made right turns.</h2>
 {% elif correct %}
-<h2 class="center"> The answer to yesterday's question was that the woman was a photographer! Congratulations, you got it right!</h2>
+<h2 class="center"> The answer to yesterday's question was that all the cars made right turns! Congratulations, you got it right!</h2>
 {% else %}
-<h2 class="center"> The answer to yesterday's question was that the woman was a photographer. Bad luck! Try again today!</h2>
+<h2 class="center"> The answer to yesterday's question was that all the cars made right turns. Bad luck! Try again today!</h2>
 {% endif %}
 {% if not answered %}
 <button style="background-color: lightblue;font-size: 40px;display: block;" onclick="openPopup()" class="center">Trivia question of the day!</button>
 <br>
 <div id="popup-1">
 	<div class="popup-content">
-		<h1>Four cars come to a four way stop, all coming from a different direction. They can't decide who got there first, so they all go forward at the same time. They do not crash into each other, but all four cars go. How is this possible?</h1>
+		<h1>What starts with a T, ends with a T and has T in it?</h1>
 		<h5>You only have <span id="counter">30</span> seconds left to answer, and remember, no googling!</h5>
 		<form method="POST" id="myForm"> {% csrf_token %}
 			{{ form.as_p }}
