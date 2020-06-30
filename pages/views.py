@@ -224,7 +224,7 @@ def awards_view(request):
 		"adult_longest_bike": Participant.objects.filter(activity__activity_type='Biking', age_group="18+").annotate(most_miles=Cast(Max("activity__miles")*2, IntegerField())).order_by("-most_miles")[:1],
 		"adult_best_push": Participant.objects.filter(activity__activity_type='Push-ups', age_group="18+").annotate(push_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-push_average")[:1],
 		"adult_best_sit": Participant.objects.filter(activity__activity_type='Sit-ups', age_group="18+").annotate(sit_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-sit_average")[:1],
-		"child_miles": Participant.objects.exclude(age_group="18+", activity__activity_type__in=["Sit-ups", "Push-ups"]).annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
+		"child_miles": Participant.objects.exclude(age_group="18+", activity__activity_type__in=["Sit-ups", "Push-ups", "Wall-sits"]).annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
 		"child_running_miles": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"child_walking_miles": Participant.objects.filter(activity__activity_type='Walking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"child_biking_miles": Participant.objects.filter(activity__activity_type='Biking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles')*2, IntegerField())).order_by('-total_miles')[:1],
