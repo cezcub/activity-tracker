@@ -3,7 +3,7 @@
 {% block content %}
 {% load tags %}
 <h4 class="image-text"> <div> June 30th will be the final check-in. </div> <br> <div style="color:rgb(137, 0, 242);"> All kids will recieve prizes! </div> <br> <div style="color:rgb(0, 180, 0);"> The more miles over your goal that you do, the bigger your prize will be. </div> <br> <div style="color: red;"> Keep up the great work! </div> </h4>
-<h1 style="font-size: 100px;">Only {{ date }} day left to go!</h1>
+<h1 style="font-size: 100px;">Last day! Make sure to enter your activities before 11:59 P.M.</h1>
 <h2 id="18+">18+</h2>
 <ol style="float: right;position: relative;right: 20%;">
 	<h1 style="background-image: url(https://i.pinimg.com/474x/8c/2e/2b/8c2e2b8cff722ae2f3db9c6748b87617.jpg);text-align: center;font-size: 45px;padding: 5px;">Top runners</h1>
@@ -37,6 +37,8 @@
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
+	{% else %}
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -66,6 +68,8 @@
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
+	{% else %}
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -94,7 +98,9 @@
 		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
-	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>	
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
+	{% else %}
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -125,6 +131,8 @@
 	</tr>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
+	{% else %}
+	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>

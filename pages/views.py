@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from users.models import Participant, Activity
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, Max
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from collections import OrderedDict 
@@ -61,7 +61,8 @@ def home_view(request):
 		yesterdays_answers = Trivia.objects.filter(date=(datetime.now(timezone(timedelta(hours=-5))).date() - timedelta(days=1)))
 		for i in yesterdays_answers:
 			if request.user == i.user:
-				context.update({"correct": True})
+				if i.answer.lower() == "teapot":
+					context.update({"correct": True})
 				break
 		else:
 			context.update({"correct": "unanswered"})
@@ -100,7 +101,7 @@ def progress_view(request):
 	d2 = {}
 	d3 = {}
 	d4 = {}
-	participants = Participant.objects.order_by('first_name')
+	participants = Participant.objects.all()
 	order_by = request.GET.get('order_by', 'total_miles')
 	if order_by not in ['total_miles', 'sit_average', 'push_average', '-total_miles', '-sit_average', '-push_average']:
 		participants = Participant.objects.order_by(order_by)
@@ -210,3 +211,29 @@ def progress_view(request):
 	if request.GET.get("full_leaderboard") == "True":
 		context.update({"full_leaderboard": True})
 	return render(request, 'progress.html', context)
+
+@login_required
+def awards_view(request):
+	context = {
+		"adult_miles": Participant.objects.filter(age_group="18+").aggregate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
+		"adult_running_miles": Participant.objects.filter(activity__activity_type='Running', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"adult_walking_miles": Participant.objects.filter(activity__activity_type='Walking', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"adult_biking_miles": Participant.objects.filter(activity__activity_type='Biking', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"adult_longest_run": Participant.objects.filter(activity__activity_type='Running', age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"adult_longest_walk": Participant.objects.filter(activity__activity_type='Walking', age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"adult_longest_bike": Participant.objects.filter(activity__activity_type='Biking', age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"adult_best_push": Participant.objects.filter(activity__activity_type='Push-ups', age_group="18+").annotate(push_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-push_average")[:1],
+		"adult_best_sit": Participant.objects.filter(activity__activity_type='Sit-ups', age_group="18+").annotate(sit_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-sit_average")[:1],
+		"child_miles": Participant.objects.exclude(age_group="18+").aggregate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
+		"child_running_miles": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"child_walking_miles": Participant.objects.filter(activity__activity_type='Walking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"child_biking_miles": Participant.objects.filter(activity__activity_type='Biking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
+		"child_longest_run": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"child_longest_walk": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"child_longest_bike": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
+		"child_best_push": Participant.objects.filter(activity__activity_type='Push-ups').exclude(age_group="18+").annotate(push_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-push_average")[:1],
+		"child_best_sit": Participant.objects.filter(activity__activity_type='Sit-ups').exclude(age_group="18+").annotate(sit_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-sit_average")[:1],
+	}
+	return render(request, 'awards.html', context)
+
+
