@@ -35,5 +35,4 @@ urlpatterns = [
 	path('home/<str:name>', superuser_profile, name='superuser_profile'),
 	path('create_activity/<str:str>/<str:name>', superuser_activity, name='superuser_activity'),
 	path('create_participant/<str:name>', superuser_participant, name='superuser_participant'),
-	path('awards/', awards_view, name="awards")
 ]

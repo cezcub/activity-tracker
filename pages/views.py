@@ -16,8 +16,10 @@ import json
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
+	daily_activities = dict(zip([x for x in reversed(range(1, 33))], ['Sit-ups', 'Squats', 'Push-ups', 'Plank', 'Jumping jacks', 'Leg lifts', 'Lunges', 'Burpees']*4))
 	context = {
-		'date': abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
+		'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
+		'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 7)).days)]
 	}
 	return render(request, 'index.html', context)
 
@@ -54,7 +56,7 @@ def home_view(request):
 			'participants': participants2,
 			'current_page': page_number,
 			'form': my_form,
-			'date': abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
+			'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
 		}
 		if request.user in answered:
 			context.update({"answered": True})
@@ -66,7 +68,7 @@ def home_view(request):
 				break
 		else:
 			context.update({"correct": "unanswered"})
-		return render(request, 'home.html', context)
+			return render(request, 'home.html', context)
 
 @login_required
 def superuser_profile(request, name):
@@ -103,13 +105,11 @@ def progress_view(request):
 	d4 = {}
 	participants = Participant.objects.all()
 	order_by = request.GET.get('order_by', 'total_miles')
-	if order_by not in ['total_miles', 'sit_average', 'push_average', '-total_miles', '-sit_average', '-push_average']:
+	if order_by not in ['total_miles', '-total_miles']:
 		participants = Participant.objects.order_by(order_by)
 	doubles = []
 	for i in participants:
 		activities = {}
-		activities.update(Activity.objects.filter(user=i, activity_type='Push-ups').aggregate(push_average=Cast(Avg('miles'), IntegerField())))
-		activities.update(Activity.objects.filter(user=i, activity_type='Sit-ups').aggregate(sit_average=Cast(Avg('miles'), IntegerField())))
 		activities.update(Activity.objects.filter(user=i, activity_type__contains='ing').aggregate(total_miles=Sum('miles')))
 		for key, value in activities.items():
 			if value == None:
@@ -137,7 +137,7 @@ def progress_view(request):
 				activities.update({'class': 'red'})
 			if activities['progress'] >= 200:
 				activities.update({'double': True, 'complete': True})
-			if activities['progress'] >= 100:
+			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d2.update({i: activities})
 		elif i.age_group == '6-8':
@@ -150,7 +150,7 @@ def progress_view(request):
 				activities.update({'class': 'red'})
 			if activities['progress'] >= 200:
 				activities.update({'double': True, 'complete': True})
-			if activities['progress'] >= 100:
+			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d3.update({i: activities})
 		elif i.age_group == '5 and below':
@@ -163,7 +163,7 @@ def progress_view(request):
 				activities.update({'class': 'red'})
 			if activities['progress'] >= 200:
 				activities.update({'double': True, 'complete': True})
-			if activities['progress'] >= 100:
+			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
 			d4.update({i: activities})
 	if order_by == 'total_miles':
@@ -176,26 +176,6 @@ def progress_view(request):
 		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'total_miles')))
 		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'total_miles')))
 		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'total_miles')))
-	elif order_by == 'push_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'push_average'), reverse=True))
-		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'push_average'), reverse=True))
-		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'push_average'), reverse=True))
-		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'push_average'), reverse=True))
-	elif order_by == '-push_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'push_average')))
-		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'push_average')))
-		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'push_average')))
-		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'push_average')))
-	elif order_by == 'sit_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'sit_average'), reverse=True))
-		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'sit_average'), reverse=True))
-		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'sit_average'), reverse=True))
-		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'sit_average'), reverse=True))
-	elif order_by == '-sit_average':
-		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'sit_average')))
-		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'sit_average')))
-		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'sit_average')))
-		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'sit_average')))
 	queryset1 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:5]
 	queryset2 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[5:]
 	context = {
@@ -206,7 +186,7 @@ def progress_view(request):
 		"5_runners": queryset1,
 		"other_runners": queryset2,
 		"url": order_by,
-		"date": abs(datetime.now(timezone(timedelta(hours=-5))).date().day - date(2020, 6, 30).day),
+		"date": abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
 	}
 	if request.GET.get("full_leaderboard") == "True":
 		context.update({"full_leaderboard": True})
@@ -222,18 +202,12 @@ def awards_view(request):
 		"adult_longest_run": Participant.objects.filter(activity__activity_type='Running', age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
 		"adult_longest_walk": Participant.objects.filter(activity__activity_type='Walking', age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
 		"adult_longest_bike": Participant.objects.filter(activity__activity_type='Biking', age_group="18+").annotate(most_miles=Cast(Max("activity__miles")*2, IntegerField())).order_by("-most_miles")[:1],
-		"adult_best_push": Participant.objects.filter(activity__activity_type='Push-ups', age_group="18+").annotate(push_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-push_average")[:1],
-		"adult_best_sit": Participant.objects.filter(activity__activity_type='Sit-ups', age_group="18+").annotate(sit_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-sit_average")[:1],
-		"child_miles": Participant.objects.exclude(age_group="18+").filter(activity__activity_type__in=["Running", "Walking", "Biking"]).annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
+		"child_miles": Participant.objects.exclude(age_group="18+").filter().annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
 		"child_running_miles": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"child_walking_miles": Participant.objects.filter(activity__activity_type='Walking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"child_biking_miles": Participant.objects.filter(activity__activity_type='Biking').exclude(age_group="18+").annotate(total_miles=Cast(Sum('activity__miles')*2, IntegerField())).order_by('-total_miles')[:1],
 		"child_longest_run": Participant.objects.filter(activity__activity_type='Running').exclude(age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
 		"child_longest_walk": Participant.objects.filter(activity__activity_type="Walking").exclude(age_group="18+").annotate(most_miles=Max("activity__miles")).order_by("-most_miles")[:1],
 		"child_longest_bike": Participant.objects.filter(activity__activity_type='Biking').exclude(age_group="18+").annotate(most_miles=Cast(Max("activity__miles")*2, IntegerField())).order_by("-most_miles")[:1],
-		"child_best_push": Participant.objects.filter(activity__activity_type='Push-ups').exclude(age_group="18+").annotate(push_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-push_average")[:1],
-		"child_best_sit": Participant.objects.filter(activity__activity_type='Sit-ups').exclude(age_group="18+").annotate(sit_average=Cast(Avg('activity__miles'), IntegerField())).order_by("-sit_average")[:1],
 	}
 	return render(request, 'awards.html', context)
-
-

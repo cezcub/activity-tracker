@@ -34,10 +34,10 @@ class EditActivity(forms.ModelForm):
 		return data
 
 class CreateActivity(forms.Form):
-	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Push-ups','Push-ups'), ('Sit-ups','Sit-ups'), ('Wall-sits','Wall-sits' )]
+	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running')]
 	activity_type = forms.ChoiceField(choices=activity_choices)
-	date = forms.DateField(widget=DateInput(attrs={'placeholder':'Enter as month/day/year - 01/01/20', 'size': 33, 'type': 'date'}))
-	miles = forms.DecimalField(max_digits=3, decimal_places=1, label='Miles/Number', help_text='Enter miles for Biking/Walking/Running, or number for Sit-ups/Push-ups')
+	date = forms.DateField(widget=DateInput(attrs={'size': 33, 'type': 'date'}))
+	miles = forms.DecimalField(max_digits=3, decimal_places=1)
 	time = forms.DurationField(help_text='Enter your time as hours:minutes:seconds - 00:45:20', label='Time Spent')
 
 class SignUpForm(UserCreationForm):

@@ -2,7 +2,6 @@
 
 {% block content %}
 {% load tags %}
-<h4 class="image-text"> <div> June 30th will be the final check-in. </div> <br> <div style="color:rgb(137, 0, 242);"> All kids will recieve prizes! </div> <br> <div style="color:rgb(0, 180, 0);"> The more miles over your goal that you do, the bigger your prize will be. </div> <br> <div style="color: red;"> Keep up the great work! </div> </h4>
 <h2 id="18+">18+</h2>
 <ol style="float: right;position: relative;right: 20%;">
 	<h1 style="background-image: url(https://i.pinimg.com/474x/8c/2e/2b/8c2e2b8cff722ae2f3db9c6748b87617.jpg);text-align: center;font-size: 45px;padding: 5px;">Top runners</h1>
@@ -24,20 +23,14 @@
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#18+">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#18+">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#18+">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#18+">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
-		<td>{{ value.push_average|floatformat }}</td>
-		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
-	{% else %}
-	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -55,20 +48,14 @@
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#9-11">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#9-11">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#9-11">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#9-11">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict2.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
-		<td>{{ value.push_average|floatformat }}</td>
-		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
-	{% else %}
-	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -86,20 +73,14 @@
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#6-8">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#6-8">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#6-8">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#6-8">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict3.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
-		<td>{{ value.push_average|floatformat }}</td>
-		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
-	{% else %}
-	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
@@ -117,21 +98,15 @@
 <table>
 	<tr>
 		<th><a href="?{% url_replace request 'order_by' 'first_name' '-' %}#5_and_below">Name</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'push_average' '-' %}#5_and_below">Avg. Push-ups</a></th>
-		<th><a href="?{% url_replace request 'order_by' 'sit_average' '-' %}#5_and_below">Avg. Sit-ups</a></th>
 		<th><a href="?{% url_replace request 'order_by' 'total_miles' '-' %}#5_and_below">Total Miles</a></th>
 	</tr>
 	{% for key, value in dict4.items %}
 	<tr>
 		<td>{{ key.first_name }}</td>
-		<td>{{ value.push_average|floatformat }}</td>
-		<td>{{ value.sit_average|floatformat }}</td>
 		<td>{{ value.total_miles|floatformat }} <br><progress class = "{{ value.class }}" value="{{ value.progress }}" max="100"></td>
 	</tr>
 	{% if value.complete %}
 	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You completed your goal! </h4> <img src="https://media1.tenor.com/images/4d2564ddb9dd176d4c25beb40c36de68/tenor.gif?itemid=15816997" alt="Falling Confetti>" style="width: 200px"></td>
-	{% else %}
-	<td><h4 style="color: red;"> Congratulations, {{ key.first_name }}! You <em style="font-size: 30px;">almost</em> completed your goal! </h4> <img src="https://images.emojiterra.com/google/android-10/128px/1f609.png" style="width: 200px"></td>
 	{% endif %}
 	{% if value.double %}
 		<td><img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"> <h3 style="color: blue;"> {{ key.first_name }}, you have gone above and beyond. You are officially a member of the double goal club!!!!!!</h3> <img src="http://www.pngmart.com/files/1/3D-Gold-Star-PNG-Picture.png" style="width: 50px;"></td>
