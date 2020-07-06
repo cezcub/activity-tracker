@@ -116,8 +116,8 @@ def superuser_profile(request, name):
 
 @login_required
 def progress_view(request):
-	start_date = date(2020, 5, 15)
-	end_date = date(2020, 6, 30)
+	start_date = date(2020, 7, 6)
+	end_date = date(2020, 8, 7)
 	current_date = date.today()
 	date_diff = current_date - start_date
 	total_days = end_date - start_date
