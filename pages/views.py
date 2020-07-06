@@ -12,14 +12,14 @@ from django.contrib.auth.models import User
 from django.http import Http404
 from .forms import TriviaForm
 from .models import Trivia
-import json
+from decimal import Decimal
 
 # Create your views here.
 def index_view(request, *args, **kwargs):
 	daily_activities = dict(zip([x for x in reversed(range(1, 33))], ['Sit-ups', 'Squats', 'Push-ups', 'Plank', 'Jumping jacks', 'Leg lifts', 'Lunges', 'Burpees']*4))
 	context = {
-		'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
-		'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 7)).days)]
+		'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 7)).days),
+		# 'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)]
 	}
 	return render(request, 'index.html', context)
 
@@ -33,12 +33,21 @@ def home_view(request):
 		return render(request, 'list.html', context)
 	else:
 		participants2 = {}
+		run_swim_goal = {}
 		participants = Participant.objects.filter(admin=request.user)
 		page_number = request.GET.get('page')
 		for i in participants:
 			activity = Activity.objects.filter(user=i).order_by('-date')
 			paginator = Paginator(activity, 10)
 			page = paginator.get_page(page_number)
+			running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/Decimal(1.5))
+			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(2.5))
+			if running['running_miles'] == None:
+				running['running_miles'] = 0
+			if swimming['swimming_miles'] == None:
+				swimming['swimming_miles'] = 0
+			run_swim = running['running_miles'] + swimming['swimming_miles']
+			run_swim_goal.update({i: run_swim})
 			participants2.update({i: page})
 		queryset = Trivia.objects.filter(date=datetime.now(timezone(timedelta(hours=-5))).date())
 		answered = []
@@ -54,6 +63,7 @@ def home_view(request):
 				return redirect('/home/?page=1')
 		context={
 			'participants': participants2,
+			'special_goal': run_swim_goal,
 			'current_page': page_number,
 			'form': my_form,
 			'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
@@ -76,6 +86,7 @@ def superuser_profile(request, name):
 		raise Http404
 	else:
 		profile = User.objects.get(username=name)
+		run_swim_goal = {}
 		participants2 = {}
 		participants = Participant.objects.filter(admin=profile)
 		page_number = request.GET.get('page')
@@ -83,11 +94,20 @@ def superuser_profile(request, name):
 			activity = Activity.objects.filter(user=i).order_by('-date')
 			paginator = Paginator(activity, 10)
 			page = paginator.get_page(page_number)
+			running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/Decimal(1.5))
+			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(2.5))
+			if running['running_miles'] == None:
+				running['running_miles'] = 0
+			if swimming['swimming_miles'] == None:
+				swimming['swimming_miles'] = 0
+			run_swim = running['running_miles'] + swimming['swimming_miles']
+			run_swim_goal.update({i: run_swim})
 			participants2.update({i: page})
 		context={
 			'participants': participants2,
+			'special_goal': run_swim_goal,
 			'current_page': page_number,
-			'username': name
+			'username': name,
 		}
 		return render(request, 'home-superuser.html', context)
 
@@ -110,7 +130,11 @@ def progress_view(request):
 	doubles = []
 	for i in participants:
 		activities = {}
-		activities.update(Activity.objects.filter(user=i, activity_type__contains='ing').aggregate(total_miles=Sum('miles')))
+		activities.update(Activity.objects.filter(user=i).aggregate(total_miles=Sum('miles')))
+		running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/1.5)
+		swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/2.5)
+		activities.update(running)
+		activities.update(swimming)
 		for key, value in activities.items():
 			if value == None:
 				activities[key] = 0
@@ -126,6 +150,8 @@ def progress_view(request):
 				activities.update({'double': True, 'complete': True})
 			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
+			if activities['running_miles'] + activities['swimming_miles'] >= 20:
+				activities.update({'complete2': True})
 			d.update({i: activities})
 		elif i.age_group == '9-11':
 			activities.update({'progress': round((activities['total_miles']/70)*100, 2)})
@@ -139,6 +165,8 @@ def progress_view(request):
 				activities.update({'double': True, 'complete': True})
 			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
+			if activities['running_miles'] + activities['swimming_miles'] >= 28:
+				activities.update({'complete2': True})
 			d2.update({i: activities})
 		elif i.age_group == '6-8':
 			activities.update({'progress': round(activities['total_miles']*2)})
@@ -152,6 +180,8 @@ def progress_view(request):
 				activities.update({'double': True, 'complete': True})
 			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
+			if activities['running_miles'] + activities['swimming_miles'] >= 15:
+				activities.update({'complete2': True})
 			d3.update({i: activities})
 		elif i.age_group == '5 and below':
 			activities.update({'progress': round((activities['total_miles']/30)*100)})
@@ -165,6 +195,8 @@ def progress_view(request):
 				activities.update({'double': True, 'complete': True})
 			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
+			if activities['running_miles'] + activities['swimming_miles' >= 5]:
+				activities.update({'complete2': True})
 			d4.update({i: activities})
 	if order_by == 'total_miles':
 		d = OrderedDict(sorted(d.items(), key = lambda x: getitem(x[1], 'total_miles'), reverse=True))
@@ -176,15 +208,11 @@ def progress_view(request):
 		d2 = OrderedDict(sorted(d2.items(), key = lambda x: getitem(x[1], 'total_miles')))
 		d3 = OrderedDict(sorted(d3.items(), key = lambda x: getitem(x[1], 'total_miles')))
 		d4 = OrderedDict(sorted(d4.items(), key = lambda x: getitem(x[1], 'total_miles')))
-	queryset1 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:5]
-	queryset2 = Participant.objects.filter(activity__activity_type='Running').annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[5:]
 	context = {
 		"dict": d,
 		"dict2": d2,
 		"dict3": d3,
 		"dict4": d4,
-		"5_runners": queryset1,
-		"other_runners": queryset2,
 		"url": order_by,
 		"date": abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
 	}
@@ -195,7 +223,7 @@ def progress_view(request):
 @login_required
 def awards_view(request):
 	context = {
-		"adult_miles": Participant.objects.filter(age_group="18+", activity__activity_type__in=["Running", "Walking", "Biking"]).annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
+		"adult_miles": Participant.objects.filter(age_group="18+", activity__activity_type__in=["Running", "Walking", "Biking", "Swimming"]).annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by("-total_miles")[:1],
 		"adult_running_miles": Participant.objects.filter(activity__activity_type='Running', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"adult_walking_miles": Participant.objects.filter(activity__activity_type='Walking', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles'), IntegerField())).order_by('-total_miles')[:1],
 		"adult_biking_miles": Participant.objects.filter(activity__activity_type='Biking', age_group="18+").annotate(total_miles=Cast(Sum('activity__miles')*2, IntegerField())).order_by('-total_miles')[:1],

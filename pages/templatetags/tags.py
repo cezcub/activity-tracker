@@ -21,3 +21,7 @@ def url_replace(request, field, value, direction=''):
 		dict_[field] = direction + value
 
 	return urlencode(OrderedDict(sorted(dict_.items())))
+
+@register.filter
+def get_item(dictionary, key):
+	return dictionary.get(key)

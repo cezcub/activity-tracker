@@ -4,6 +4,7 @@ from .forms import CreateParticipant, CreateActivity, SignUpForm, EditActivity
 from django.contrib.auth.decorators import login_required
 from .models import Participant, Activity
 from django.http import Http404
+from decimal import Decimal
 
 # Create your views here.
 def create_user(request):
@@ -41,6 +42,10 @@ def edit_activity(request, pk):
 	activity = get_object_or_404(Activity, user__in=participants, id=pk)
 	if activity.activity_type == 'Biking':
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles*2})
+	elif activity.activity_type in ["Running", "Elliptical"]:
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles/Decimal(1.5)})
+	elif activity.activity_type == "Swimming":
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles/Decimal(2.5)})
 	else:
 		my_form = EditActivity(request.POST or None, instance=activity)
 	if my_form.is_valid():
@@ -71,6 +76,10 @@ def create_activity(request, str):
 			my_dict.update({'user': participant})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
+			if my_dict['activity_type'] in ["Running", "Elliptical"]:
+				my_dict['miles'] = my_dict['miles']*Decimal(1.5)
+			if my_dict['activity_type'] == "Swimming":
+				my_dict['miles'] = my_dict['miles']*Decimal(2.5)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
 	return render(request, 'form.html', {'form': my_form})
@@ -97,6 +106,10 @@ def superuser_activity(request, str, name):
 			my_dict.update({'user': participant})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
+			if my_dict['activity_type'] in ["Running", "Elliptical"]:
+				my_dict['miles'] = my_dict['miles']*Decimal(1.5)
+			if my_dict['activity_type'] == "Swimming":
+				my_dict['miles'] = my_dict['miles']*Decimal(2.5)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
 	return render(request, 'form.html', {'form': my_form})

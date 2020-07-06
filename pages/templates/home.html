@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load tags %}
 <ul>
 	{% for key, value in participants.items %}
-		<li><h3>{{ key.first_name }}</h3><a href = '/create_activity/{{ key.first_name }}'><button type="button">Create a new activity for {{ key.first_name }}</button></a><a href = '/delete_participant/{{ key.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
+		<li><h3>{{ key.first_name }} - {{ special_goal|get_item:key }} running/swimming miles</h3><a href = '/create_activity/{{ key.first_name }}'><button type="button">Create a new activity for {{ key.first_name }}</button></a><a href = '/delete_participant/{{ key.first_name }} '><button type="button" style="position:relative;left:10%;">Delete this participant</button></a>
 		<br>
 		<br>
 			<table style="width: 50%">

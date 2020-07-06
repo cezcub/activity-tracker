@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Activity
-
+from decimal import Decimal
 
 class DateInput(forms.DateInput):
 	input_type = 'date'
@@ -14,8 +14,8 @@ class CreateParticipant(forms.Form):
 
 
 class EditActivity(forms.ModelForm):
-	date = forms.DateField(widget=DateInput(attrs={'placeholder':'Enter as month/day/year - 01/01/20', 'size': 33}))
-	miles = forms.DecimalField(max_digits=3, decimal_places=1, label='Miles/Number', help_text='Enter miles for Biking/Walking/Running, or number for Sit-ups/Push-ups')
+	date = forms.DateField(widget=DateInput(attrs={'size': 33}))
+	miles = forms.DecimalField(max_digits=3, decimal_places=1)
 	class Meta:
 		model = Activity
 		fields = ['activity_type', 'date', 'miles', 'time']
@@ -31,14 +31,18 @@ class EditActivity(forms.ModelForm):
 		data = self.cleaned_data['miles']
 		if self.cleaned_data['activity_type'] == 'Biking':
 			data = round(data/2, 1)
+		elif self.cleaned_data['activity_type'] in ["Running", "Elliptical"]:
+			data['miles'] = round(data*Decimal(1.5), 1)
+		elif self.cleaned_data['activity_type'] == "Swimming":
+			data = round(data*Decimal(2.5), 1)
 		return data
 
 class CreateActivity(forms.Form):
-	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running')]
+	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Swimming', 'Swimming'), ('Elliptical', 'Elliptical'), ('Rowing', 'Rowing')]
 	activity_type = forms.ChoiceField(choices=activity_choices)
-	date = forms.DateField(widget=DateInput(attrs={'size': 33, 'type': 'date'}))
+	date = forms.DateField(widget=DateInput(attrs={'size': 33}))
 	miles = forms.DecimalField(max_digits=3, decimal_places=1)
-	time = forms.DurationField(help_text='Enter your time as hours:minutes:seconds - 00:45:20', label='Time Spent')
+	time = forms.DurationField(label='Time Spent')
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
