@@ -31,7 +31,7 @@ def create_participant(request):
 			my_dict.update({'admin': request.user})
 			Participant.objects.create(**my_dict)
 			return redirect('/home/?page=1')
-	return render(request, 'formt.html', {'form': my_form})
+	return render(request, 'form.html', {'form': my_form})
 
 @login_required
 def edit_activity(request, pk):
