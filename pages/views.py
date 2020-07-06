@@ -32,6 +32,7 @@ def home_view(request):
 		}
 		return render(request, 'list.html', context)
 	else:
+		daily_activities = dict(zip([x for x in reversed(range(1, 33))], ['Sit-ups', 'Squats', 'Push-ups', 'Plank', 'Jumping jacks', 'Leg lifts', 'Lunges', 'Burpees']*4))
 		participants2 = {}
 		run_swim_goal = {}
 		participants = Participant.objects.filter(admin=request.user)
@@ -62,6 +63,7 @@ def home_view(request):
 				Trivia.objects.create(**my_dict)
 				return redirect('/home/?page=1')
 		context={
+
 			'participants': participants2,
 			'special_goal': run_swim_goal,
 			'current_page': page_number,
@@ -105,6 +107,7 @@ def superuser_profile(request, name):
 			participants2.update({i: page})
 		context={
 			'participants': participants2,
+			# 'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)],
 			'special_goal': run_swim_goal,
 			'current_page': page_number,
 			'username': name,
@@ -195,7 +198,7 @@ def progress_view(request):
 				activities.update({'double': True, 'complete': True})
 			elif activities['progress'] >= 100:
 				activities.update({'complete': True})
-			if activities['running_miles'] + activities['swimming_miles' >= 5]:
+			if activities['running_miles'] + activities['swimming_miles'] >= 5:
 				activities.update({'complete2': True})
 			d4.update({i: activities})
 	if order_by == 'total_miles':
