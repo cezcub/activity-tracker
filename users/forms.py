@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Activity
 from decimal import Decimal
+from django.core.exceptions import ValidationError
+from .validators import date_checker
 
 class DateInput(forms.DateInput):
 	input_type = 'date'
@@ -14,7 +16,7 @@ class CreateParticipant(forms.Form):
 
 
 class EditActivity(forms.ModelForm):
-	date = forms.DateField(widget=DateInput(attrs={'size': 33}))
+	date = forms.DateField(validators=[date_checker], widget=DateInput(attrs={'size': 33}))
 	miles = forms.DecimalField(max_digits=3, decimal_places=1)
 	class Meta:
 		model = Activity
@@ -42,7 +44,7 @@ class EditActivity(forms.ModelForm):
 class CreateActivity(forms.Form):
 	activity_choices = [('Biking','Biking'), ('Walking', 'Walking'), ('Running','Running'), ('Swimming', 'Swimming'), ('Elliptical', 'Elliptical'), ('Rowing', 'Rowing')]
 	activity_type = forms.ChoiceField(choices=activity_choices)
-	date = forms.DateField(widget=DateInput(attrs={'size': 33}))
+	date = forms.DateField(validators=[date_checker], widget=DateInput(attrs={'size': 33}))
 	miles = forms.DecimalField(max_digits=3, decimal_places=1)
 	time = forms.DurationField(label='Time Spent')
 

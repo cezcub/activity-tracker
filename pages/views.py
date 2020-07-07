@@ -19,7 +19,7 @@ def index_view(request, *args, **kwargs):
 	daily_activities = dict(zip([x for x in reversed(range(1, 33))], ['Sit-ups', 'Squats', 'Push-ups', 'Plank', 'Jumping jacks', 'Leg lifts', 'Lunges', 'Burpees']*4))
 	context = {
 		'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 7)).days),
-		# 'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)]
+		'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)],
 	}
 	return render(request, 'index.html', context)
 
@@ -67,6 +67,7 @@ def home_view(request):
 			'participants': participants2,
 			'special_goal': run_swim_goal,
 			'current_page': page_number,
+			'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)],
 			'form': my_form,
 			'date': abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 6)).days),
 		}
@@ -107,7 +108,6 @@ def superuser_profile(request, name):
 			participants2.update({i: page})
 		context={
 			'participants': participants2,
-			# 'activity': daily_activities[abs((datetime.now(timezone(timedelta(hours=-5))).date() - date(2020, 8, 8)).days)],
 			'special_goal': run_swim_goal,
 			'current_page': page_number,
 			'username': name,
