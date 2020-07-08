@@ -43,9 +43,9 @@ def edit_activity(request, pk):
 	if activity.activity_type == 'Biking':
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles*2})
 	elif activity.activity_type in ["Running", "Elliptical"]:
-		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles/Decimal(1.5)})
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': round(activity.miles/Decimal(1.5), 1)})
 	elif activity.activity_type == "Swimming":
-		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': activity.miles/Decimal(2.5)})
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': round(activity.miles/Decimal(2.5), 1)})
 	else:
 		my_form = EditActivity(request.POST or None, instance=activity)
 	if my_form.is_valid():
