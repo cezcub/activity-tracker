@@ -47,7 +47,7 @@ def home_view(request):
 				running['running_miles'] = 0
 			if swimming['swimming_miles'] == None:
 				swimming['swimming_miles'] = 0
-			run_swim = running['running_miles'] + swimming['swimming_miles']
+			run_swim = round(running['running_miles'] + swimming['swimming_miles'], 1)
 			run_swim_goal.update({i: run_swim})
 			participants2.update({i: page})
 		queryset = Trivia.objects.filter(date=datetime.now(timezone(timedelta(hours=-5))).date())
@@ -103,7 +103,7 @@ def superuser_profile(request, name):
 				running['running_miles'] = 0
 			if swimming['swimming_miles'] == None:
 				swimming['swimming_miles'] = 0
-			run_swim = running['running_miles'] + swimming['swimming_miles']
+			run_swim = round(running['running_miles'] + swimming['swimming_miles'], 1)
 			run_swim_goal.update({i: run_swim})
 			participants2.update({i: page})
 		context={
