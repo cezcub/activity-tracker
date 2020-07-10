@@ -42,7 +42,7 @@ def home_view(request):
 			paginator = Paginator(activity, 10)
 			page = paginator.get_page(page_number)
 			running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/Decimal(1.5))
-			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(2.5))
+			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(1.25))
 			if running['running_miles'] == None:
 				running['running_miles'] = 0
 			if swimming['swimming_miles'] == None:
@@ -98,7 +98,7 @@ def superuser_profile(request, name):
 			paginator = Paginator(activity, 10)
 			page = paginator.get_page(page_number)
 			running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/Decimal(1.5))
-			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(2.5))
+			swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(1.25))
 			if running['running_miles'] == None:
 				running['running_miles'] = 0
 			if swimming['swimming_miles'] == None:
@@ -134,8 +134,8 @@ def progress_view(request):
 	for i in participants:
 		activities = {}
 		activities.update(Activity.objects.filter(user=i).aggregate(total_miles=Sum('miles')))
-		running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/1.5)
-		swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/2.5)
+		running = Activity.objects.filter(user=i, activity_type="Running").aggregate(running_miles=Sum('miles')/Decimal(1.5))
+		swimming = Activity.objects.filter(user=i, activity_type="Swimming").aggregate(swimming_miles=Sum('miles')/Decimal(1.25))
 		activities.update(running)
 		activities.update(swimming)
 		for key, value in activities.items():
