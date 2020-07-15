@@ -39,6 +39,9 @@ class EditActivity(forms.ModelForm):
 		elif self.cleaned_data['activity_type'] == "Swimming":
 			myvar2 = Decimal(2.5)
 			data = round(data*myvar2, 1)
+		elif self.cleaned_data['activity_type'] == "Rowing":
+			myvar3 = Decimal(1.2)
+			data=round(data*myvar3, 1)
 		return data
 
 class CreateActivity(forms.Form):

@@ -46,6 +46,8 @@ def edit_activity(request, pk):
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': round(activity.miles/Decimal(1.5), 1)})
 	elif activity.activity_type == "Swimming":
 		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': round(activity.miles/Decimal(2.5), 1)})
+	elif activity.activity_type == "Rowing":
+		my_form = EditActivity(request.POST or None, instance=activity, initial={'miles': round(activity.miles/Decimal(1.2), 1)})
 	else:
 		my_form = EditActivity(request.POST or None, instance=activity)
 	if my_form.is_valid():
@@ -76,10 +78,12 @@ def create_activity(request, str):
 			my_dict.update({'user': participant})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
-			if my_dict['activity_type'] in ["Running", "Elliptical"]:
+			elif my_dict['activity_type'] in ["Running", "Elliptical"]:
 				my_dict['miles'] = my_dict['miles']*Decimal(1.5)
-			if my_dict['activity_type'] == "Swimming":
+			elif my_dict['activity_type'] == "Swimming":
 				my_dict['miles'] = my_dict['miles']*Decimal(2.5)
+			elif my_dict['activity_type'] == "Rowing":
+				my_dict['miles'] = my_dict['miles']*Decimal(1.2)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
 	return render(request, 'form.html', {'form': my_form})
@@ -106,10 +110,12 @@ def superuser_activity(request, str, name):
 			my_dict.update({'user': participant})
 			if my_dict['activity_type'] == "Biking":
 				my_dict['miles'] = my_dict['miles']/2
-			if my_dict['activity_type'] in ["Running", "Elliptical"]:
+			elif my_dict['activity_type'] in ["Running", "Elliptical"]:
 				my_dict['miles'] = my_dict['miles']*Decimal(1.5)
-			if my_dict['activity_type'] == "Swimming":
+			elif my_dict['activity_type'] == "Swimming":
 				my_dict['miles'] = my_dict['miles']*Decimal(2.5)
+			elif my_dict['activity_type'] == "Rowing":
+				my_dict['miles'] = my_dict['miles']*Decimal(1.2)
 			Activity.objects.create(**my_dict)
 			return redirect('/home/?page=1')
 	return render(request, 'form.html', {'form': my_form})
