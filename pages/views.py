@@ -157,7 +157,7 @@ def progress_view(request):
 				activities.update({'complete2': True})
 			d.update({i: activities})
 		elif i.age_group == '9-11':
-			activities.update({'progress': round((activities['total_miles']/70)*100, 2)})
+			activities.update({'progress': round((activities['total_miles']/80)*100, 2)})
 			if activities['progress'] - 20 >= percentage_days:
 				activities.update({'class': 'flair'})
 			elif activities['progress'] >= percentage_days:
