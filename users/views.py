@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, models
-from .forms import CreateParticipant, CreateActivity, SignUpForm, EditActivity
+from .forms import CreateParticipant, CreateActivity, SignUpForm, EditActivity, ConfirmPassword
 from django.contrib.auth.decorators import login_required
 from .models import Participant, Activity
 from django.http import Http404
 from decimal import Decimal
+from .decorators import confirm_password
+from django.views.generic.edit import UpdateView
 
 # Create your views here.
 def create_user(request):
@@ -21,6 +23,23 @@ def create_user(request):
 		form = SignUpForm()
 	return render(request, 'signup.html', {'form': form})
 
+def confirm_password_view(request):
+	my_form = ConfirmPassword(request.POST or None, instance=request.user)
+	if my_form.is_valid():
+		my_form.save()
+		return redirect(request.get_full_path())
+	return render(request, 'confirm.html', {'form': my_form})
+
+class ConfirmPasswordView(UpdateView):
+	form_class = ConfirmPassword
+	template_name = 'confirm.html'
+
+	def get_object(self):
+		return self.request.user
+
+	def get_success_url(self):
+		return self.request.get_full_path()
+
 @login_required
 def create_participant(request):
 	my_form = CreateParticipant()
@@ -34,6 +53,7 @@ def create_participant(request):
 	return render(request, 'form.html', {'form': my_form})
 
 @login_required
+@confirm_password
 def edit_activity(request, pk):
 	if request.user.is_superuser:
 		participants = Participant.objects.all()
@@ -56,6 +76,7 @@ def edit_activity(request, pk):
 	return render(request, 'form.html', {'form': my_form})
 
 @login_required
+@confirm_password
 def delete_activity(request, pk):
 	if request.user.is_superuser:
 		participants = Participant.objects.all()
@@ -89,6 +110,7 @@ def create_activity(request, str):
 	return render(request, 'form.html', {'form': my_form})
 
 @login_required
+@confirm_password
 def delete_participant(request, str):
 	participant = get_object_or_404(Participant, first_name=str, admin=request.user)
 	if request.method == 'POST':

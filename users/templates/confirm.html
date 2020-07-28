@@ -4,8 +4,9 @@
 {% block content %}
 
 <form method = 'POST'> {% csrf_token %}
+	<h1>Please confirm password to perform this action</h1>
 	{{ form.as_p }}
-	<input type = 'submit' value="Save" style="font-size: 15px;" />
+	<input type = 'submit' value="Confirm" style="font-size: 15px;" /> 
 	<a href = '/home/?page=1'><button type = "button">Cancel</button></a>
 </form>
 {% endblock %}
